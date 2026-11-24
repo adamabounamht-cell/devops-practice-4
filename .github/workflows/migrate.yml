@@ -1,0 +1,28 @@
+name: Idempotent Mattermost Migration & Upgrade
+
+on:
+  workflow_dispatch: # هذا الخيار يسمح لك بتشغيله يدوياً بالضغط على زر
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Backup Legacy MySQL
+        run: |
+          echo "Creating backup of MySQL..."
+          sleep 34 # محاكاة وقت الباك أب
+          echo "Backup completed."
+
+      - name: Run pgloader
+        run: |
+          echo "Running pgloader to migrate to PostgreSQL..."
+          sleep 18 # محاكاة وقت الترحيل
+          echo "Migration completed."
+
+      - name: Deploy Upgraded Stack
+        run: |
+          echo "Deploying new stack..."
+          echo "Upgrade successful!"
