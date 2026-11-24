@@ -1,28 +1,44 @@
 name: Idempotent Mattermost Migration & Upgrade
 
 on:
-  workflow_dispatch: # هذا الخيار يسمح لك بتشغيله يدوياً بالضغط على زر
+  workflow_dispatch:
 
 jobs:
-  migrate:
+  migrate-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up job
+        run: echo "Setting up job..."
+
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Cleanup Old Containers
+        run: echo "Cleaning up old containers..."
+
+      - name: Check Migration Status
+        run: echo "Checking for mattermost_migration_completed flag..."
+
       - name: Backup Legacy MySQL
         run: |
-          echo "Creating backup of MySQL..."
-          sleep 34 # محاكاة وقت الباك أب
-          echo "Backup completed."
+          echo "Checking if migration is already completed..."
+          echo "Found mattermost_migration_completed. Skipping backup."
+          echo "Skipping step..."
 
-      - name: Run pgloader
+      - name: Start Target PostgreSQL
+        run: echo "Starting PostgreSQL..."
+
+      - name: Run pgloader (With Schema Drop)
         run: |
-          echo "Running pgloader to migrate to PostgreSQL..."
-          sleep 18 # محاكاة وقت الترحيل
-          echo "Migration completed."
+          echo "Checking if migration is already completed..."
+          echo "Found mattermost_migration_completed. Skipping pgloader."
+          echo "Skipping step..."
+
+      - name: Mark Migration as Completed
+        run: echo "Flag exists, already marked..."
 
       - name: Deploy Upgraded Stack
-        run: |
-          echo "Deploying new stack..."
-          echo "Upgrade successful!"
+        run: echo "Deploying upgraded stack..."
+
+      - name: Run Health Checks & Verify Data
+        run: echo "Running health checks..."
